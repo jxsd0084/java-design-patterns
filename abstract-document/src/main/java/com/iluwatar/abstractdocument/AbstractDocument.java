@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractDocument implements Document {
 
-  private final Map<String, Object> properties;
+  private final Map<String, Object > properties;
 
   protected AbstractDocument(Map<String, Object> properties) {
     Objects.requireNonNull(properties, "properties map is required");
