@@ -23,9 +23,7 @@
 package com.iluwatar.builder;
 
 /**
- *
  * Hero, the class with many parameters.
- *
  */
 public final class Hero {
 
@@ -105,18 +103,17 @@ public final class Hero {
 	}
 
 	/**
-	 *
 	 * The builder class.
-	 *
 	 */
 	public static class Builder {
 
 		private final Profession profession;
 		private final String     name;
-		private       HairType   hairType;
-		private       HairColor  hairColor;
-		private       Armor      armor;
-		private       Weapon     weapon;
+
+		private HairType  hairType;
+		private HairColor hairColor;
+		private Armor     armor;
+		private Weapon    weapon;
 
 		/**
 		 * Constructor
@@ -158,5 +155,7 @@ public final class Hero {
 
 			return new Hero( this );
 		}
+
 	}
+
 }
