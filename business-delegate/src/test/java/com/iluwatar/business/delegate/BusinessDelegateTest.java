@@ -1,17 +1,17 @@
 /**
  * The MIT License
  * Copyright (c) 2014 Ilkka Seppälä
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,79 +22,79 @@
  */
 package com.iluwatar.business.delegate;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.mockito.Mockito.*;
 
 /**
  * The Business Delegate pattern adds an abstraction layer between the presentation and business
  * tiers. By using the pattern we gain loose coupling between the tiers. The Business Delegate
  * encapsulates knowledge about how to locate, connect to, and interact with the business objects
  * that make up the application.
- * 
+ *
  * <p>Some of the services the Business Delegate uses are instantiated directly, and some can be
  * retrieved through service lookups. The Business Delegate itself may contain business logic too
  * potentially tying together multiple service calls, exception handling, retrying etc.
  */
 public class BusinessDelegateTest {
 
-  private EjbService ejbService;
+	private EjbService ejbService;
 
-  private JmsService jmsService;
+	private JmsService jmsService;
 
-  private BusinessLookup businessLookup;
+	private BusinessLookup businessLookup;
 
-  private BusinessDelegate businessDelegate;
+	private BusinessDelegate businessDelegate;
 
-  /**
-   * This method sets up the instance variables of this test class. It is executed before the
-   * execution of every test.
-   */
-  @Before
-  public void setup() {
-    ejbService = spy(new EjbService());
-    jmsService = spy(new JmsService());
+	/**
+	 * This method sets up the instance variables of this test class. It is executed before the
+	 * execution of every test.
+	 */
+	@Before
+	public void setup() {
 
-    businessLookup = spy(new BusinessLookup());
-    businessLookup.setEjbService(ejbService);
-    businessLookup.setJmsService(jmsService);
+		ejbService = spy( new EjbService() );
+		jmsService = spy( new JmsService() );
 
-    businessDelegate = spy(new BusinessDelegate());
-    businessDelegate.setLookupService(businessLookup);
-  }
+		businessLookup = spy( new BusinessLookup() );
+		businessLookup.setEjbService( ejbService );
+		businessLookup.setJmsService( jmsService );
 
-  /**
-   * In this example the client ({@link Client}) utilizes a business delegate (
-   * {@link BusinessDelegate}) to execute a task. The Business Delegate then selects the appropriate
-   * service and makes the service call.
-   */
-  @Test
-  public void testBusinessDelegate() {
+		businessDelegate = spy( new BusinessDelegate() );
+		businessDelegate.setLookupService( businessLookup );
+	}
 
-    // setup a client object
-    Client client = new Client(businessDelegate);
+	/**
+	 * In this example the client ({@link Client}) utilizes a business delegate (
+	 * {@link BusinessDelegate}) to execute a task. The Business Delegate then selects the appropriate
+	 * service and makes the service call.
+	 */
+	@Test
+	public void testBusinessDelegate() {
 
-    // set the service type
-    businessDelegate.setServiceType(ServiceType.EJB);
+		// setup a client object
+		Client client = new Client( businessDelegate );
 
-    // action
-    client.doTask();
+		// set the service type
+		businessDelegate.setServiceType( ServiceType.EJB );
 
-    // verifying that the businessDelegate was used by client during doTask() method.
-    verify(businessDelegate).doTask();
-    verify(ejbService).doProcessing();
+		// action
+		client.doTask();
 
-    // set the service type
-    businessDelegate.setServiceType(ServiceType.JMS);
+		// verifying that the businessDelegate was used by client during doTask() method.
+		verify( businessDelegate ).doTask();
+		verify( ejbService ).doProcessing();
 
-    // action
-    client.doTask();
+		// set the service type
+		businessDelegate.setServiceType( ServiceType.JMS );
 
-    // verifying that the businessDelegate was used by client during doTask() method.
-    verify(businessDelegate, times(2)).doTask();
-    verify(jmsService).doProcessing();
-  }
+		// action
+		client.doTask();
+
+		// verifying that the businessDelegate was used by client during doTask() method.
+		verify( businessDelegate, times( 2 ) ).doTask();
+		verify( jmsService ).doProcessing();
+	}
+
 }
